@@ -11,6 +11,7 @@ from torchinfo import summary
 import yaml
 import json
 import sys
+from tqdm import tqdm
 
 sys.path.append("..")
 from lib.utils import (
@@ -103,7 +104,7 @@ def train(
     scheduler,
     criterion,
     clip_grad=0,
-    max_epochs=200,
+    max_epochs=50,
     early_stop=10,
     verbose=1,
     plot=False,
@@ -118,7 +119,8 @@ def train(
     train_loss_list = []
     val_loss_list = []
 
-    for epoch in range(max_epochs):
+    for epoch in tqdm(range(max_epochs)):
+        print('epoch:', epoch)
         train_loss = train_one_epoch(
             model, trainset_loader, optimizer, scheduler, criterion, clip_grad, log=log
         )

@@ -14,7 +14,7 @@ METRLA:
   milestones: [20,30]
   lr_decay_rate: 0.1
   batch_size: 16
-  max_epochs: 200
+  max_epochs: 50
   early_stop: 30
   use_cl: False
   cl_step_size: 2500
@@ -53,7 +53,7 @@ PEMSBAY:
   milestones: [10, 30]
   lr_decay_rate: 0.1
   batch_size: 16
-  max_epochs: 300
+  max_epochs: 50
   early_stop: 20
   use_cl: False
 
@@ -90,7 +90,7 @@ PEMS04:
   milestones: [15, 30, 50]
   lr_decay_rate: 0.1
   batch_size: 16
-  max_epochs: 300
+  max_epochs: 50
   early_stop: 20
   use_cl: False
   cl_step_size: 2500
@@ -128,7 +128,7 @@ PEMS07:
   milestones: [15, 35, 50]
   lr_decay_rate: 0.1
   batch_size: 16
-  max_epochs: 300
+  max_epochs: 50
   early_stop: 20
   use_cl: False
   cl_step_size: 2500
@@ -166,7 +166,7 @@ PEMS08:
   milestones: [25, 45, 65]
   lr_decay_rate: 0.1
   batch_size: 16
-  max_epochs: 300
+  max_epochs: 50
   early_stop: 30
   use_cl: False
   cl_step_size: 2500
@@ -205,7 +205,7 @@ PEMS03:
   milestones: [15, 30, 40]
   lr_decay_rate: 0.1
   batch_size: 16
-  max_epochs: 300
+  max_epochs: 50
   early_stop: 20
   use_cl: False
   cl_step_size: 2500
