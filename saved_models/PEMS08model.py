@@ -1,8 +1,14 @@
-import os
+import matplotlib.pyplot as plt
 import numpy as np
+import os
+import random
 import sys
 import torch
 import yaml
+
+from einops import rearrange
+from matplotlib.colors import to_rgba
+from sklearn.manifold import TSNE
 
 path = os.getcwd()
 sys.path.append(path)
@@ -50,7 +56,7 @@ counter = 0
 embeddings = []
 for x_batch, y_batch in trainset_loader:
     counter += 1
-    if counter % 150 == 0:
+    if counter % 2 == 0:
         break
 
     batch_size = x_batch.shape[0]
@@ -62,24 +68,20 @@ for x_batch, y_batch in trainset_loader:
     x_batch = x_batch[..., : model.input_dim]
 
     x_batch = model.input_proj(x_batch)  # (batch_size, in_steps, num_nodes, input_embedding_dim)
-    features = [x_batch]
+    features = []
+    # features = [x_batch]
     if model.tod_embedding_dim > 0:
         tod_emb = model.tod_embedding(
             (tod * model.steps_per_day).long()
         )  # (batch_size, in_steps, num_nodes, tod_embedding_dim)
-        features.append(tod_emb)
+        # features.append(tod_emb)
         # print(tod_emb.shape)
     if model.dow_embedding_dim > 0:
         dow_emb = model.dow_embedding(
             dow.long()
         )  # (batch_size, in_steps, num_nodes, dow_embedding_dim)
-        features.append(dow_emb)
+        # features.append(dow_emb)
         # print(dow_emb.shape)
-    # if model.spatial_embedding_dim > 0:
-    #     spatial_emb = model.node_emb.expand(
-    #         batch_size, model.in_steps, *model.node_emb.shape
-    #     )
-    #     features.append(spatial_emb)
     if model.adaptive_embedding_dim > 0:
         adp_emb = model.adaptive_embedding.expand(
             size=(batch_size, *model.adaptive_embedding.shape)
@@ -88,4 +90,43 @@ for x_batch, y_batch in trainset_loader:
         # print(adp_emb.shape)
     embeddings.append(torch.cat(features, dim=-1)) # (batch_size, in_steps, num_nodes, model_dim)
 
-print(torch.cat(embeddings).shape)
+all_embeddings = torch.cat(embeddings)
+print(all_embeddings.shape)
+
+def generate_random_rgb():
+    return (random.random(), random.random(), random.random())
+
+# Generate 170 different RGB values
+num_colors = 170
+rgb_values = [generate_random_rgb() for _ in range(num_colors)]
+
+# # Convert RGB values to Matplotlib color strings
+# mpl_colors = [to_rgba(rgb) for rgb in rgb_values]
+
+# Assuming X is your flattened data
+flattened_embeddings = rearrange(all_embeddings.detach().numpy(), 'batch_size in_steps num_nodes model_dim -> (batch_size in_steps num_nodes) model_dim')
+tsne = TSNE(n_components=2, perplexity=100)
+print('tsne')
+tsne_embeddings = tsne.fit_transform(flattened_embeddings)
+print('tsne_embeddings')
+unflattened = torch.reshape(torch.tensor(tsne_embeddings), (16, 12, 170, 2))
+# unflattened_embeddings = rearrange(tsne_embeddings, 'n model_dim -> (16 12 170) model_dim')
+plt.figure(figsize=(30, 20))
+for i in range(170):
+    time_i = unflattened[:, :, i:i+1, :]
+    
+    flattened = rearrange(time_i, 'batch_size in_steps num_nodes model_dim -> (batch_size in_steps num_nodes) model_dim')
+    
+    plt.scatter(flattened[:, 0], flattened[:, 1], c=rgb_values[i], s=30)
+    
+# randn = torch.randn_like(torch.tensor(flattened_embeddings))
+
+print('tsne')
+
+# tsne_embeddings = tsne.fit_transform(randn)
+print('tsne_embeddings')
+
+
+plt.colorbar()
+plt.title('t-SNE Plot along Spatial Axis')
+plt.show()

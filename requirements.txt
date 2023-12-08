@@ -1,6 +1,7 @@
-torch
+einops
+matplotlib
 numpy
 pandas
-matplotlib
 pyyaml
+torch
 torchinfo
