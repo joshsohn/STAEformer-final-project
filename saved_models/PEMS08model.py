@@ -53,11 +53,12 @@ trainset_loader, valset_loader, testset_loader, SCALER = get_dataloaders_from_in
 # all_embeddings = torch.empty((batch_size, in_steps, num_nodes, model_dim))
 
 counter = 0
+num_batch = 3
 embeddings = []
 for x_batch, y_batch in trainset_loader:
-    counter += 1
-    if counter % 2 == 0:
+    if counter == num_batch:
         break
+    counter += 1
 
     batch_size = x_batch.shape[0]
 
@@ -109,7 +110,7 @@ tsne = TSNE(n_components=2, perplexity=100)
 print('tsne')
 tsne_embeddings = tsne.fit_transform(flattened_embeddings)
 print('tsne_embeddings')
-unflattened = torch.reshape(torch.tensor(tsne_embeddings), (16, 12, 170, 2))
+unflattened = torch.reshape(torch.tensor(tsne_embeddings), (16*num_batch, 12, 170, 2))
 # unflattened_embeddings = rearrange(tsne_embeddings, 'n model_dim -> (16 12 170) model_dim')
 plt.figure(figsize=(30, 20))
 for i in range(170):
