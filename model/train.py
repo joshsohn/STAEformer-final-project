@@ -76,9 +76,9 @@ def train_one_epoch(
 
     model.train()
     batch_loss_list = []
-    # counter = 0
+    counter = 0
     for x_batch, y_batch in trainset_loader:
-        # counter += 1
+        counter += 1
         # print(counter)
         x_batch = x_batch.to(DEVICE)
         y_batch = y_batch.to(DEVICE)
@@ -220,8 +220,10 @@ if __name__ == "__main__":
     # -------------------------- set running environment ------------------------- #
 
     parser = argparse.ArgumentParser()
+    parser.add_argument("-m", "--model", type=str, default="STAEformer")
     parser.add_argument("-d", "--dataset", type=str, default="pems08")
     parser.add_argument("-g", "--gpu_num", type=int, default=0)
+    parser.add_argument("-p", "--perturb", type=bool, default=False)
     args = parser.parse_args()
 
     seed = torch.randint(1000, (1,)) # set random seed here
@@ -243,8 +245,12 @@ if __name__ == "__main__":
 
     # -------------------------------- load model -------------------------------- #
 
-    # model = STAEformer(**cfg["model_args"])
-    model = Spacetimeformer(**cfg["model_args"])
+    if args.model == "STAEformer":
+        model = STAEformer(**cfg["model_args"])
+    elif args.model == "Spacetimeformer":
+        model = Spacetimeformer(**cfg["model_args"])
+    else:
+        raise ValueError("Unsupported model.")
 
     # ------------------------------- make log file ------------------------------ #
 
@@ -271,6 +277,7 @@ if __name__ == "__main__":
         dow=cfg.get("day_of_week"),
         batch_size=cfg.get("batch_size", 64),
         log=log,
+        perturb=args.perturb
     )
     print_log(log=log)
 

@@ -7,9 +7,17 @@ from .utils import print_log, StandardScaler, vrange
 
 
 def get_dataloaders_from_index_data(
-    data_dir, tod=False, dow=False, dom=False, batch_size=64, log=None
+    data_dir, tod=False, dow=False, dom=False, batch_size=64, log=None, perturb=False
 ):
     data = np.load(os.path.join(data_dir, "data.npz"))["data"].astype(np.float32)
+    print(data)
+    
+    if perturb:
+        noise_level=5.0
+        noise = np.random.normal(0, noise_level, data.shape)
+        data = data + noise
+        print(noise.shape)
+    print(data)
 
     features = [0]
     if tod:
