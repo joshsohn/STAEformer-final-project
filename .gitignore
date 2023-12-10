@@ -127,7 +127,7 @@ dmypy.json
 .pyre/
 
 temp*
-*.pt
+# *.pt
 *_embedded.npy
 *_embedded.npz
 
@@ -140,4 +140,4 @@ PEMSBAY.npy
 nohup.out
 .idea/
 run_nohup.sh
-logs/
+# logs/

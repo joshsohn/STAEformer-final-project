@@ -200,25 +200,25 @@ def normalize_dataframe(df, explained_var=None, fig_dpi:int=150, plot_opt:bool=T
     df_abs = df_norm.copy().abs().set_index(df_norm.index)
     df_abs = df_abs.sort_values(by=list(df_abs.columns), ascending=False)
     
-    # Plot
-    if plot_opt:
-        # Z-normalized corr matrix
-        plt.figure(dpi=fig_dpi)
-        ax_normal = sns.heatmap(df_norm, cmap="RdBu")
-        ax_normal.set_title("Z-Normalized Data")
-        if save_plot:
-            plt.savefig('Z_normalized_corr_matrix.png')
-        else:
-            plt.show()
+    # # Plot
+    # if plot_opt:
+    #     # Z-normalized corr matrix
+    #     plt.figure(dpi=fig_dpi)
+    #     ax_normal = sns.heatmap(df_norm, cmap="RdBu")
+    #     ax_normal.set_title("Z-Normalized Data")
+    #     if save_plot:
+    #         plt.savefig('Z_normalized_corr_matrix.png')
+    #     else:
+    #         plt.show()
 
-        # |Z-normalized corr matrix|  
-        plt.figure(dpi=fig_dpi)
-        ax_abs = sns.heatmap(df_abs, cmap="Purples")
-        ax_abs.set_title("|Z-Normalized|")
-        if save_plot:
-            plt.savefig('Z_normalized_corr_matrix_Abs.png')
-        else:
-            plt.show()
+    #     # |Z-normalized corr matrix|  
+    #     plt.figure(dpi=fig_dpi)
+    #     ax_abs = sns.heatmap(df_abs, cmap="Purples")
+    #     ax_abs.set_title("|Z-Normalized|")
+    #     if save_plot:
+    #         plt.savefig('Z_normalized_corr_matrix_Abs.png')
+    #     else:
+    #         plt.show()
         
     # Re-normalize by explained var (& sort)
     if explained_var.any():
@@ -226,7 +226,7 @@ def normalize_dataframe(df, explained_var=None, fig_dpi:int=150, plot_opt:bool=T
         df_byvar = df_byvar.sort_values(by=list(df_norm.columns), ascending=False)
         if plot_opt:
             plt.figure(dpi=fig_dpi)
-            ax_relative = sns.heatmap(df_byvar, cmap="Purples")
+            ax_relative = sns.heatmap(df_byvar, cmap="Purples", xticklabels=True, yticklabels=True)
             ax_relative.set_title("|Z-Normalized|*Explained_Variance")
             if save_plot:
                 plt.savefig('Normalized_corr_matrix.png')
@@ -279,9 +279,10 @@ def pca_full_report(X, features_:list=None, fig_dpi:int=150, save_plot:bool=Fals
 dataset = "PEMS08"
 dataset = dataset.upper()
 # print("parent is ", parent)
-path = os.getcwd() 
+path = os.getcwd()
 
 parentdir = os.path.abspath(path)
 data_path = parentdir + f'/data/{dataset}'
 data = np.load(os.path.join(data_path, "data.npz"))["data"].astype(np.float32)[:, :, 0]
-iris_outputs = pca_full_report(X=data, features_=np.arange(170))
+
+df_pca, X_pca, pca_evr, df_corr, df_n, df_na, df_nabv, df_rank = pca_full_report(X=data, features_=np.arange(170))

@@ -24,6 +24,7 @@ from lib.utils import (
 from lib.metrics import RMSE_MAE_MAPE
 from lib.data_prepare import get_dataloaders_from_index_data
 from model.STAEformer import STAEformer
+from model.Spacetimeformer import Spacetimeformer
 
 # ! X shape: (B, T, N, C)
 
@@ -75,7 +76,10 @@ def train_one_epoch(
 
     model.train()
     batch_loss_list = []
+    # counter = 0
     for x_batch, y_batch in trainset_loader:
+        # counter += 1
+        # print(counter)
         x_batch = x_batch.to(DEVICE)
         y_batch = y_batch.to(DEVICE)
         out_batch = model(x_batch)
@@ -239,7 +243,8 @@ if __name__ == "__main__":
 
     # -------------------------------- load model -------------------------------- #
 
-    model = STAEformer(**cfg["model_args"])
+    # model = STAEformer(**cfg["model_args"])
+    model = Spacetimeformer(**cfg["model_args"])
 
     # ------------------------------- make log file ------------------------------ #
 
@@ -280,7 +285,7 @@ if __name__ == "__main__":
 
     if dataset in ("METRLA", "PEMSBAY"):
         criterion = MaskedMAELoss()
-    elif dataset in ("PEMS03", "PEMS04", "PEMS07", "PEMS08"):
+    elif dataset in ("PEMS03", "PEMS04", "PEMS07", "PEMS08", "PEMS08_PERTURBED"):
         criterion = nn.HuberLoss()
     else:
         raise ValueError("Unsupported dataset.")
