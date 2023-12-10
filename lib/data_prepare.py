@@ -10,14 +10,16 @@ def get_dataloaders_from_index_data(
     data_dir, tod=False, dow=False, dom=False, batch_size=64, log=None, perturb=False
 ):
     data = np.load(os.path.join(data_dir, "data.npz"))["data"].astype(np.float32)
-    print(data)
+    print(data.shape)
+    batch_size, num_sensors, _ = data.shape
     
     if perturb:
+        # print(perturb)
         noise_level=5.0
-        noise = np.random.normal(0, noise_level, data.shape)
-        data = data + noise
-        print(noise.shape)
-    print(data)
+        noise = np.random.normal(0, noise_level, (batch_size, num_sensors, 1))
+        data[:, :, 0: 1] += noise
+        # print(noise.shape)
+    print(data.shape)
 
     features = [0]
     if tod:

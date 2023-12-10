@@ -79,7 +79,7 @@ def train_one_epoch(
     counter = 0
     for x_batch, y_batch in trainset_loader:
         counter += 1
-        # print(counter)
+        print(counter)
         x_batch = x_batch.to(DEVICE)
         y_batch = y_batch.to(DEVICE)
         out_batch = model(x_batch)
@@ -223,8 +223,10 @@ if __name__ == "__main__":
     parser.add_argument("-m", "--model", type=str, default="STAEformer")
     parser.add_argument("-d", "--dataset", type=str, default="pems08")
     parser.add_argument("-g", "--gpu_num", type=int, default=0)
-    parser.add_argument("-p", "--perturb", type=bool, default=False)
+    parser.add_argument("-p", "--perturb", action='store_true')
     args = parser.parse_args()
+
+    print(args.perturb)
 
     seed = torch.randint(1000, (1,)) # set random seed here
     seed_everything(seed)
