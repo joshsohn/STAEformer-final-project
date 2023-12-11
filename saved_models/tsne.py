@@ -16,7 +16,7 @@ from lib.data_prepare import get_dataloaders_from_index_data
 from model.STAEformer import STAEformer
 from model.Spacetimeformer import Spacetimeformer
 
-file_path = 'saved_models/STAEformer-PEMS08-2023-12-04-19-25-52.pt'
+file_path = 'saved_models/STAEformer-PEMS08PERTURBEDTRAINING-2023-12-10-18-48-37.pt'
 
 # Load the model2
 loaded_model = torch.load(file_path)
