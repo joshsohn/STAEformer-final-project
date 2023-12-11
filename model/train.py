@@ -72,6 +72,9 @@ def predict(model, loader):
 def train_one_epoch(
     model, trainset_loader, optimizer, scheduler, criterion, clip_grad, log=None
 ):
+
+    torch.cuda.memory_summary(device=None, abbreviated=False)
+
     global cfg, global_iter_count, global_target_length
 
     model.train()
@@ -79,7 +82,7 @@ def train_one_epoch(
     counter = 0
     for x_batch, y_batch in trainset_loader:
         counter += 1
-        print(counter)
+        # print(counter)
         x_batch = x_batch.to(DEVICE)
         y_batch = y_batch.to(DEVICE)
         out_batch = model(x_batch)
@@ -226,7 +229,8 @@ if __name__ == "__main__":
     parser.add_argument("-p", "--perturb", action='store_true')
     args = parser.parse_args()
 
-    print(args.perturb)
+    print('perturb:', args.perturb)
+    print('model:', args.model)
 
     seed = torch.randint(1000, (1,)) # set random seed here
     seed_everything(seed)

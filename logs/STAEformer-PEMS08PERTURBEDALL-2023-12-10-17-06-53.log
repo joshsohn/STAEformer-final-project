@@ -1,0 +1,183 @@
+PEMS08
+Trainset:	x-(10700, 12, 170, 3)	y-(10700, 12, 170, 1)
+Valset:  	x-(3567, 12, 170, 3)  	y-(3567, 12, 170, 1)
+Testset:	x-(3566, 12, 170, 3)	y-(3566, 12, 170, 1)
+
+--------- STAEformer ---------
+{
+    "num_nodes": 170,
+    "in_steps": 12,
+    "out_steps": 12,
+    "train_size": 0.6,
+    "val_size": 0.2,
+    "time_of_day": true,
+    "day_of_week": true,
+    "lr": 0.001,
+    "weight_decay": 0.0015,
+    "milestones": [
+        25,
+        45,
+        65
+    ],
+    "lr_decay_rate": 0.1,
+    "batch_size": 16,
+    "max_epochs": 50,
+    "early_stop": 30,
+    "use_cl": false,
+    "cl_step_size": 2500,
+    "model_args": {
+        "num_nodes": 170,
+        "in_steps": 12,
+        "out_steps": 12,
+        "steps_per_day": 288,
+        "input_dim": 3,
+        "output_dim": 1,
+        "input_embedding_dim": 24,
+        "tod_embedding_dim": 24,
+        "dow_embedding_dim": 24,
+        "spatial_embedding_dim": 0,
+        "adaptive_embedding_dim": 80,
+        "feed_forward_dim": 256,
+        "num_heads": 4,
+        "num_layers": 3,
+        "dropout": 0.1
+    }
+}
+==========================================================================================
+Layer (type:depth-idx)                   Output Shape              Param #
+==========================================================================================
+STAEformer                               [16, 12, 170, 1]          163,200
+├─Linear: 1-1                            [16, 12, 170, 24]         96
+├─Embedding: 1-2                         [16, 12, 170, 24]         6,912
+├─Embedding: 1-3                         [16, 12, 170, 24]         168
+├─ModuleList: 1-4                        --                        --
+│    └─SelfAttentionLayer: 2-1           [16, 12, 170, 152]        --
+│    │    └─AttentionLayer: 3-1          [16, 170, 12, 152]        93,024
+│    │    └─Dropout: 3-2                 [16, 170, 12, 152]        --
+│    │    └─LayerNorm: 3-3               [16, 170, 12, 152]        304
+│    │    └─Sequential: 3-4              [16, 170, 12, 152]        78,232
+│    │    └─Dropout: 3-5                 [16, 170, 12, 152]        --
+│    │    └─LayerNorm: 3-6               [16, 170, 12, 152]        304
+│    └─SelfAttentionLayer: 2-2           [16, 12, 170, 152]        --
+│    │    └─AttentionLayer: 3-7          [16, 170, 12, 152]        93,024
+│    │    └─Dropout: 3-8                 [16, 170, 12, 152]        --
+│    │    └─LayerNorm: 3-9               [16, 170, 12, 152]        304
+│    │    └─Sequential: 3-10             [16, 170, 12, 152]        78,232
+│    │    └─Dropout: 3-11                [16, 170, 12, 152]        --
+│    │    └─LayerNorm: 3-12              [16, 170, 12, 152]        304
+│    └─SelfAttentionLayer: 2-3           [16, 12, 170, 152]        --
+│    │    └─AttentionLayer: 3-13         [16, 170, 12, 152]        93,024
+│    │    └─Dropout: 3-14                [16, 170, 12, 152]        --
+│    │    └─LayerNorm: 3-15              [16, 170, 12, 152]        304
+│    │    └─Sequential: 3-16             [16, 170, 12, 152]        78,232
+│    │    └─Dropout: 3-17                [16, 170, 12, 152]        --
+│    │    └─LayerNorm: 3-18              [16, 170, 12, 152]        304
+├─ModuleList: 1-5                        --                        --
+│    └─SelfAttentionLayer: 2-4           [16, 12, 170, 152]        --
+│    │    └─AttentionLayer: 3-19         [16, 12, 170, 152]        93,024
+│    │    └─Dropout: 3-20                [16, 12, 170, 152]        --
+│    │    └─LayerNorm: 3-21              [16, 12, 170, 152]        304
+│    │    └─Sequential: 3-22             [16, 12, 170, 152]        78,232
+│    │    └─Dropout: 3-23                [16, 12, 170, 152]        --
+│    │    └─LayerNorm: 3-24              [16, 12, 170, 152]        304
+│    └─SelfAttentionLayer: 2-5           [16, 12, 170, 152]        --
+│    │    └─AttentionLayer: 3-25         [16, 12, 170, 152]        93,024
+│    │    └─Dropout: 3-26                [16, 12, 170, 152]        --
+│    │    └─LayerNorm: 3-27              [16, 12, 170, 152]        304
+│    │    └─Sequential: 3-28             [16, 12, 170, 152]        78,232
+│    │    └─Dropout: 3-29                [16, 12, 170, 152]        --
+│    │    └─LayerNorm: 3-30              [16, 12, 170, 152]        304
+│    └─SelfAttentionLayer: 2-6           [16, 12, 170, 152]        --
+│    │    └─AttentionLayer: 3-31         [16, 12, 170, 152]        93,024
+│    │    └─Dropout: 3-32                [16, 12, 170, 152]        --
+│    │    └─LayerNorm: 3-33              [16, 12, 170, 152]        304
+│    │    └─Sequential: 3-34             [16, 12, 170, 152]        78,232
+│    │    └─Dropout: 3-35                [16, 12, 170, 152]        --
+│    │    └─LayerNorm: 3-36              [16, 12, 170, 152]        304
+├─Linear: 1-6                            [16, 170, 12]             21,900
+==========================================================================================
+Total params: 1,223,460
+Trainable params: 1,223,460
+Non-trainable params: 0
+Total mult-adds (M): 16.96
+==========================================================================================
+Input size (MB): 0.39
+Forward/backward pass size (MB): 2087.13
+Params size (MB): 4.24
+Estimated Total Size (MB): 2091.76
+==========================================================================================
+
+Loss: HuberLoss
+
+2023-12-10 17:08:44.519896 Epoch 1  	Train Loss = 28.11004 Val Loss = 19.43430
+2023-12-10 17:10:33.595228 Epoch 2  	Train Loss = 19.41158 Val Loss = 18.23592
+2023-12-10 17:12:22.927902 Epoch 3  	Train Loss = 18.17147 Val Loss = 18.47488
+2023-12-10 17:14:12.223623 Epoch 4  	Train Loss = 17.57383 Val Loss = 17.52017
+2023-12-10 17:16:01.702428 Epoch 5  	Train Loss = 16.82869 Val Loss = 17.15836
+2023-12-10 17:17:51.249050 Epoch 6  	Train Loss = 16.44503 Val Loss = 16.69563
+2023-12-10 17:19:40.711152 Epoch 7  	Train Loss = 16.20859 Val Loss = 15.89325
+2023-12-10 17:21:30.166421 Epoch 8  	Train Loss = 15.84961 Val Loss = 15.57035
+2023-12-10 17:23:19.765419 Epoch 9  	Train Loss = 15.71330 Val Loss = 16.44734
+2023-12-10 17:25:09.365642 Epoch 10  	Train Loss = 15.53081 Val Loss = 15.44860
+2023-12-10 17:26:58.906166 Epoch 11  	Train Loss = 15.33533 Val Loss = 15.56114
+2023-12-10 17:28:48.110109 Epoch 12  	Train Loss = 15.20281 Val Loss = 15.45600
+2023-12-10 17:30:37.241162 Epoch 13  	Train Loss = 14.98929 Val Loss = 15.45316
+2023-12-10 17:32:26.355369 Epoch 14  	Train Loss = 14.88430 Val Loss = 14.95369
+2023-12-10 17:34:15.764501 Epoch 15  	Train Loss = 14.71500 Val Loss = 15.53783
+2023-12-10 17:36:05.231252 Epoch 16  	Train Loss = 14.67421 Val Loss = 15.09889
+2023-12-10 17:37:54.671435 Epoch 17  	Train Loss = 14.55330 Val Loss = 14.96369
+2023-12-10 17:39:43.838452 Epoch 18  	Train Loss = 14.46432 Val Loss = 15.27829
+2023-12-10 17:41:33.025996 Epoch 19  	Train Loss = 14.38272 Val Loss = 14.91872
+2023-12-10 17:43:22.533067 Epoch 20  	Train Loss = 14.36222 Val Loss = 14.88564
+2023-12-10 17:45:12.099341 Epoch 21  	Train Loss = 14.32094 Val Loss = 14.99505
+2023-12-10 17:47:01.547677 Epoch 22  	Train Loss = 14.22093 Val Loss = 14.91234
+2023-12-10 17:48:50.912832 Epoch 23  	Train Loss = 14.17065 Val Loss = 14.82071
+2023-12-10 17:50:40.501215 Epoch 24  	Train Loss = 14.14751 Val Loss = 15.20813
+2023-12-10 17:52:30.214794 Epoch 25  	Train Loss = 14.11717 Val Loss = 14.80741
+2023-12-10 17:54:19.656945 Epoch 26  	Train Loss = 13.58955 Val Loss = 14.49586
+2023-12-10 17:56:09.091122 Epoch 27  	Train Loss = 13.51256 Val Loss = 14.52397
+2023-12-10 17:57:58.504117 Epoch 28  	Train Loss = 13.48861 Val Loss = 14.54127
+2023-12-10 17:59:47.764842 Epoch 29  	Train Loss = 13.46848 Val Loss = 14.56829
+2023-12-10 18:01:36.936092 Epoch 30  	Train Loss = 13.44699 Val Loss = 14.57046
+2023-12-10 18:03:25.884047 Epoch 31  	Train Loss = 13.43184 Val Loss = 14.61472
+2023-12-10 18:05:14.816733 Epoch 32  	Train Loss = 13.41809 Val Loss = 14.56451
+2023-12-10 18:07:04.702804 Epoch 33  	Train Loss = 13.40052 Val Loss = 14.61758
+2023-12-10 18:08:54.819715 Epoch 34  	Train Loss = 13.38640 Val Loss = 14.58224
+2023-12-10 18:10:46.281926 Epoch 35  	Train Loss = 13.37447 Val Loss = 14.60778
+2023-12-10 18:12:36.995656 Epoch 36  	Train Loss = 13.36199 Val Loss = 14.62227
+2023-12-10 18:14:29.601857 Epoch 37  	Train Loss = 13.35206 Val Loss = 14.59893
+2023-12-10 18:16:21.961910 Epoch 38  	Train Loss = 13.34031 Val Loss = 14.63577
+2023-12-10 18:18:14.090451 Epoch 39  	Train Loss = 13.32761 Val Loss = 14.61166
+2023-12-10 18:20:06.168394 Epoch 40  	Train Loss = 13.31933 Val Loss = 14.65058
+2023-12-10 18:21:57.945645 Epoch 41  	Train Loss = 13.30807 Val Loss = 14.65501
+2023-12-10 18:23:50.620817 Epoch 42  	Train Loss = 13.29566 Val Loss = 14.65546
+2023-12-10 18:25:42.788171 Epoch 43  	Train Loss = 13.28766 Val Loss = 14.65363
+2023-12-10 18:27:35.043192 Epoch 44  	Train Loss = 13.27653 Val Loss = 14.70106
+2023-12-10 18:29:27.094760 Epoch 45  	Train Loss = 13.26635 Val Loss = 14.68710
+2023-12-10 18:31:18.954117 Epoch 46  	Train Loss = 13.20561 Val Loss = 14.65884
+2023-12-10 18:33:10.099653 Epoch 47  	Train Loss = 13.19664 Val Loss = 14.63320
+2023-12-10 18:35:00.993023 Epoch 48  	Train Loss = 13.19421 Val Loss = 14.64561
+2023-12-10 18:36:52.331579 Epoch 49  	Train Loss = 13.19113 Val Loss = 14.65446
+2023-12-10 18:38:42.790478 Epoch 50  	Train Loss = 13.19077 Val Loss = 14.65202
+Early stopping at epoch: 50
+Best at epoch 26:
+Train Loss = 13.58955
+Train RMSE = 22.53043, MAE = 13.52993, MAPE = 25.58534
+Val Loss = 14.49586
+Val RMSE = 25.78529, MAE = 15.13954, MAPE = 29.55439
+Saved Model: ../saved_models/STAEformer-PEMS08-2023-12-10-17-06-53.pt
+--------- Test ---------
+All Steps RMSE = 24.39664, MAE = 14.96136, MAPE = 31.48302
+Step 1 RMSE = 20.66503, MAE = 13.30526, MAPE = 26.87391
+Step 2 RMSE = 21.72915, MAE = 13.74530, MAPE = 28.49880
+Step 3 RMSE = 22.59071, MAE = 14.13568, MAPE = 28.75542
+Step 4 RMSE = 23.29445, MAE = 14.44823, MAPE = 29.65187
+Step 5 RMSE = 23.89554, MAE = 14.72428, MAPE = 31.47710
+Step 6 RMSE = 24.44559, MAE = 14.97440, MAPE = 30.32727
+Step 7 RMSE = 24.93029, MAE = 15.20445, MAPE = 32.10157
+Step 8 RMSE = 25.35844, MAE = 15.41727, MAPE = 31.56374
+Step 9 RMSE = 25.73078, MAE = 15.60404, MAPE = 34.57461
+Step 10 RMSE = 26.08566, MAE = 15.78435, MAPE = 33.37125
+Step 11 RMSE = 26.41056, MAE = 15.97697, MAPE = 34.43819
+Step 12 RMSE = 26.77634, MAE = 16.21603, MAPE = 36.16258
+Inference time: 10.68 s

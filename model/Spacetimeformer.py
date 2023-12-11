@@ -193,12 +193,12 @@ class Spacetimeformer(nn.Module):
 
     def forward(self, x):
         # x: (batch_size, in_steps, num_nodes, input_dim+tod+dow=3)
-        # print("the input dims are ", x.shape)
+        print("the input dims are ", x.shape)
         batch_size, in_steps, num_nodes, dimension = x.shape
         x = torch.flatten(x, start_dim = 2, end_dim = 3)
-        # print("size of x before is ", x.shape)
+        print("size of x before is ", x.shape)
         x = self.spacetimeformer_layer(x)
-        # print("size of x is ", x.shape)
+        print("size of x is ", x.shape)
         # if self.tod_embedding_dim > 0:
         #     tod = x[..., 1]
         # if self.dow_embedding_dim > 0:

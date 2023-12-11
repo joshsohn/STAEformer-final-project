@@ -191,6 +191,7 @@ class STAEformer(nn.Module):
 
     def forward(self, x):
         # x: (batch_size, in_steps, num_nodes, input_dim+tod+dow=3)
+        # print('x:', x.shape)
         batch_size = x.shape[0]
 
         if self.tod_embedding_dim > 0:

@@ -11,15 +11,6 @@ def get_dataloaders_from_index_data(
 ):
     data = np.load(os.path.join(data_dir, "data.npz"))["data"].astype(np.float32)
     print(data.shape)
-    batch_size, num_sensors, _ = data.shape
-    
-    if perturb:
-        # print(perturb)
-        noise_level=5.0
-        noise = np.random.normal(0, noise_level, (batch_size, num_sensors, 1))
-        data[:, :, 0: 1] += noise
-        # print(noise.shape)
-    print(data.shape)
 
     features = [0]
     if tod:
@@ -45,6 +36,21 @@ def get_dataloaders_from_index_data(
 
     x_train = data[x_train_index]
     y_train = data[y_train_index][..., :1]
+
+    print('x_train:', x_train.shape)
+    print('y_train:', y_train.shape)
+
+    if perturb:
+        # print(perturb)
+        noise_level=5.0
+        bsize_x, instep_x, num_sensors_x, _ = x_train.shape
+        bsize_y, instep_y, num_sensors_y, _ = y_train.shape
+        noise_x = np.random.normal(0, noise_level, (bsize_x, instep_x, num_sensors_x, 1))
+        noise_y = np.random.normal(0, noise_level, (bsize_y, instep_y, num_sensors_y, 1))
+        x_train[:, :, :, 0:1] += noise_x
+        y_train[:, :, :, 0:1] += noise_y
+        # print(noise.shape)
+
     x_val = data[x_val_index]
     y_val = data[y_val_index][..., :1]
     x_test = data[x_test_index]
