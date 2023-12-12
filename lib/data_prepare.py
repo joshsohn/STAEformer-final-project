@@ -37,8 +37,8 @@ def get_dataloaders_from_index_data(
     x_train = data[x_train_index]
     y_train = data[y_train_index][..., :1]
 
-    print('x_train:', x_train.shape)
-    print('y_train:', y_train.shape)
+    # print('x_train:', x_train.shape)
+    # print('y_train:', y_train.shape)
 
     if perturb:
         # print(perturb)
@@ -65,6 +65,9 @@ def get_dataloaders_from_index_data(
     print_log(f"Trainset:\tx-{x_train.shape}\ty-{y_train.shape}", log=log)
     print_log(f"Valset:  \tx-{x_val.shape}  \ty-{y_val.shape}", log=log)
     print_log(f"Testset:\tx-{x_test.shape}\ty-{y_test.shape}", log=log)
+
+    print('x_train', x_train[:, :, :, 0:1])
+    print('y_train', y_train)
 
     trainset = torch.utils.data.TensorDataset(
         torch.FloatTensor(x_train), torch.FloatTensor(y_train)

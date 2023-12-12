@@ -286,3 +286,5 @@ data_path = parentdir + f'/data/{dataset}'
 data = np.load(os.path.join(data_path, "data.npz"))["data"].astype(np.float32)[:, :, 0]
 
 df_pca, X_pca, pca_evr, df_corr, df_n, df_na, df_nabv, df_rank = pca_full_report(X=data, features_=np.arange(170))
+
+print(df_rank.loc[0:20, 'feature_'].to_list())

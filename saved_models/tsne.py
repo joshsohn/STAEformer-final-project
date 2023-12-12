@@ -15,8 +15,10 @@ sys.path.append(path)
 from lib.data_prepare import get_dataloaders_from_index_data
 from model.STAEformer import STAEformer
 from model.Spacetimeformer import Spacetimeformer
+from lib.pca2 import pca_full_report
 
-file_path = 'saved_models/STAEformer-PEMS08PERTURBEDTRAINING-2023-12-10-18-48-37.pt'
+pt_file = 'STAEformer-PEMS08-2023-12-04-19-25-52.pt'
+file_path = 'saved_models/' + pt_file
 
 # Load the model2
 loaded_model = torch.load(file_path)
@@ -32,9 +34,14 @@ path = os.getcwd()
 
 parentdir = os.path.abspath(path)
 data_path = parentdir + f'/data/{dataset}'
-data = np.load(os.path.join(data_path, "data.npz"))["data"].astype(np.float32)
+data = np.load(os.path.join(data_path, "data.npz"))["data"].astype(np.float32)[:, :, 0]
 data = torch.tensor(data)
 model_name = STAEformer.__name__
+
+_, _, _, _, _, _, _, df_rank = pca_full_report(X=data, features_=np.arange(170))
+top_n = 5
+most_relevant_features = df_rank.loc[0:top_n, 'feature_'].to_list()
+print(most_relevant_features)
 
 with open(f"model/{model_name}.yaml", "r") as f:
     cfg = yaml.safe_load(f)
@@ -55,7 +62,7 @@ trainset_loader, valset_loader, testset_loader, SCALER = get_dataloaders_from_in
 # all_embeddings = torch.empty((batch_size, in_steps, num_nodes, model_dim))
 
 counter = 0
-num_batch = 3
+num_batch = 1
 embeddings = []
 for x_batch, y_batch in trainset_loader:
     if counter == num_batch:
@@ -114,6 +121,28 @@ tsne_embeddings = tsne.fit_transform(flattened_embeddings)
 print('tsne_embeddings')
 unflattened = torch.reshape(torch.tensor(tsne_embeddings), (16*num_batch, 12, 170, 2))
 # unflattened_embeddings = rearrange(tsne_embeddings, 'n model_dim -> (16 12 170) model_dim')
+plt.figure(figsize=(30, 20))
+for i in most_relevant_features:
+    time_i = unflattened[:, :, i:i+1, :]
+    
+    flattened = rearrange(time_i, 'batch_size in_steps num_nodes model_dim -> (batch_size in_steps num_nodes) model_dim')
+    
+    print('flattened:', flattened.shape)
+
+    plt.scatter(flattened[:, 0], flattened[:, 1], c=rgb_values[i], s=30)
+    
+# randn = torch.randn_like(torch.tensor(flattened_embeddings))
+
+print('tsne')
+
+# tsne_embeddings = tsne.fit_transform(randn)
+print('tsne_embeddings')
+
+
+plt.colorbar()
+plt.title('t-SNE Plot along Spatial Axis')
+plt.show()
+
 plt.figure(figsize=(30, 20))
 for i in range(170):
     time_i = unflattened[:, :, i:i+1, :]
